@@ -24,6 +24,22 @@ dp_table = [[[] for _ in range(m)] for _ in range(n)]
 7 W L W W L L W W 
 8 W L W W L W W W 
 '''
+
+'''
+    the rules for the pattern of the above table are:
+    1. All cells are 'W' EXCEPT:
+        - cells in the first row with i != 0 or i != 1
+        - cells in the first column with j != 0 or i != 1
+        - cells:
+                [i+1][j] [i][j+1]   [i][j+2]   [i][j+3]
+                [i+2][j] [i+1][j+1] [i+1][j+2]
+                [i+3][j] [i+2][j+1]
+                e.g. if i == 1 and j == 1 then the cells with the value 'L' are:
+                2,1 1,2 1,3 1,4
+                3,1 2,2 2,3
+                4,1 3,2
+   
+'''
 for i in range(n):
     for j in range(m):
         dp_table[i][j] = "W"
@@ -36,7 +52,7 @@ for i in range(n):
 i = 1
 j = 1
 
-def apply_procedure(dp_table, i, j):
+def apply_procedure(dp_table, i, j): #making a function for the general loop
     for repeats in range (4):
         if repeats == 1:
             dp_table[i + 1][j] = "L"
@@ -52,9 +68,9 @@ def apply_procedure(dp_table, i, j):
         elif repeats == 4:
             dp_table[i][j + 3] = "L"
 
-while (i < (max(n,m) - 3)):
-    if (n < m):
-        if ((i - n) < 3):
+while (i < (max(n,m) - 3)): #termination condition
+    if (n < m): #making sure we are always in range with the correct conditions. If len(n) is smaller than len(m)
+        if ((i - n) < 3): #if i is about to go out of range then skip some modifications
             for repeats in range (4):
                 if repeats == 1:
                     dp_table[i + 1][j] = "L"
@@ -66,11 +82,11 @@ while (i < (max(n,m) - 3)):
                     dp_table[i + 1][j + 2] = "L"
                 elif repeats == 4:
                     dp_table[i][j + 3] = "L"
-        else:
+        else: #else do the initial procedure without skipping cells
             apply_procedure(dp_table, i, j)
     
-    elif (m < n):
-        if((j - m) < 3):
+    elif (m < n):#If len(m) is smaller than len(n)
+        if((j - m) < 3):#if j is about to go out of range then skip some modifications
             for repeats in range (2):
                 if repeats == 1:
                     dp_table[i + 1][j] = "L"
@@ -80,23 +96,11 @@ while (i < (max(n,m) - 3)):
                     dp_table[i][j + 1] = "L"
                     dp_table[i + 1][j + 1] = "L"
                     dp_table[i + 2][j + 1] = "L"
-        else:
+        else:#else do the initial procedure without skipping cells
             apply_procedure(dp_table, i, j)
     else:
-        for repeats in range (4):
-            if repeats == 1:
-                dp_table[i + 1][j] = "L"
-                dp_table[i + 2][j] = "L"
-                dp_table[i + 3][j] = "L"
-            elif repeats == 2:
-                dp_table[i][j + 1] = "L"
-                dp_table[i + 1][j + 1] = "L"
-                dp_table[i + 2][j + 1] = "L"
-            elif repeats == 3:
-                dp_table[i][j + 2] = "L"
-                dp_table[i + 1][j + 2] = "L"
-            elif repeats == 4:
-                dp_table[i][j + 3] = "L"
+        apply_procedure(dp_table, i, j)
+
     
     i += 3
     j += 3
