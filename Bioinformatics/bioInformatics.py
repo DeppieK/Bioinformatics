@@ -11,7 +11,6 @@ m = len(sequence2)
 #creating the dynamic programming table
 dp_table = [[[] for _ in range(m)] for _ in range(n)]
 
-#keep?
 n_index = n - 1
 m_index = m - 1
 
@@ -32,15 +31,21 @@ m_index = m - 1
 10 W L L L L L L L L L W
 '''
 
+'''
+    the rules for the pattern of the above table are:
+    1. When i == j -> 'W' EXCEPTION! if i == j == 0 -> 'L'
+    2. When i != j -> 'L' EXCEPTION! if (i != j) AND (i == 0 OR j == 0) -> 'W'
+'''
+
 for i in range(n):
     for j in range(m):
-        if i == j:
-            if i == 0 or j == 0:
+        if i == j: #first rule
+            if i == 0 or j == 0: #first exception
                 dp_table[i][j] = "L"
             else:
                 dp_table[i][j] = "W"
-        else:
-            if i == 0 or j == 0:
+        else: #second rule
+            if i == 0 or j == 0: #second exception
                 dp_table[i][j] = "W"
             else:
                 dp_table[i][j] = "L"
